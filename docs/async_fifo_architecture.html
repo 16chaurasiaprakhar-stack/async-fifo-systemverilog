@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Production Asynchronous FIFO Architecture Diagram</title>
+<style>
+  :root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --wclk-color: #0284c7;
+    --wclk-light: #38bdf8;
+    --rclk-color: #7c3aed;
+    --rclk-light: #a78bfa;
+    --mem-color: #059669;
+    --mem-light: #34d399;
+    --wire-color: #94a3b8;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .header h1 {
+    margin: 0 0 8px 0;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #e2e8f0;
+  }
+
+  .header p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .canvas-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    border: 1px solid #334155;
+    padding: 24px;
+    max-width: 1200px;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  svg {
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  }
+
+  /* SVG Typography & Styling */
+  .label-title { font-weight: 700; font-size: 13px; fill: #ffffff; text-anchor: middle; }
+  .label-sub   { font-size: 11px; fill: #cbd5e1; text-anchor: middle; }
+  .label-port  { font-size: 11px; font-weight: 600; font-family: "Courier New", monospace; fill: #e2e8f0; }
+  .label-bus   { font-size: 10px; font-family: "Courier New", monospace; fill: #94a3b8; }
+
+  /* Domains */
+  .domain-box { stroke-dasharray: 6,4; stroke-width: 1.5; fill-opacity: 0.04; rx: 12; }
+  .domain-wclk { stroke: var(--wclk-light); fill: var(--wclk-color); }
+  .domain-rclk { stroke: var(--rclk-light); fill: var(--rclk-color); }
+  .domain-header { font-size: 13px; font-weight: 800; letter-spacing: 1px; }
+
+  /* Modules */
+  .module-box { rx: 8; stroke-width: 2; }
+  .mod-wclk { fill: #0c4a6e; stroke: var(--wclk-light); }
+  .mod-rclk { fill: #4c1d95; stroke: var(--rclk-light); }
+  .mod-mem  { fill: #064e3b; stroke: var(--mem-light); }
+  .mod-sync { fill: #1e1b4b; stroke: #818cf8; stroke-dasharray: 4,3; }
+
+  /* Flop stages inside sync */
+  .flop-box { fill: #312e81; stroke: #a5b4fc; stroke-width: 1.5; rx: 4; }
+
+  /* Signal Paths */
+  .wire { stroke: var(--wire-color); stroke-width: 1.8; fill: none; }
+  .wire-wclk { stroke: var(--wclk-light); stroke-width: 2; fill: none; }
+  .wire-rclk { stroke: var(--rclk-light); stroke-width: 2; fill: none; }
+  .wire-data { stroke: var(--mem-light); stroke-width: 2.5; fill: none; }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-top: 20px;
+    font-size: 13px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-chip { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid transparent; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Production Asynchronous FIFO Architecture (`async_fifo_pro`)</h1>
+  <p>Partitioned Dual-Clock Architecture with Metastability Synchronizers (Reference: Cummings FIFO Style #1)</p>
+</div>
+
+<div class="canvas-card">
+  <svg width="1120" height="660" viewBox="0 0 1120 660">
+    <defs>
+      <!-- Arrow Markers -->
+      <marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <polygon points="0 0, 8 4, 0 8" fill="#94a3b8"/>
+      </marker>
+      <marker id="arrow-wclk" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <polygon points="0 0, 8 4, 0 8" fill="#38bdf8"/>
+      </marker>
+      <marker id="arrow-rclk" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <polygon points="0 0, 8 4, 0 8" fill="#a78bfa"/>
+      </marker>
+      <marker id="arrow-data" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <polygon points="0 0, 8 4, 0 8" fill="#34d399"/>
+      </marker>
+    </defs>
+
+    <!-- ==================== DOMAIN BACKGROUNDS ==================== -->
+    <!-- Write Domain Background -->
+    <rect x="20" y="20" width="440" height="620" class="domain-box domain-wclk"/>
+    <text x="40" y="48" class="domain-header" fill="#38bdf8">WRITE CLOCK DOMAIN (wclk)</text>
+
+    <!-- Read Domain Background -->
+    <rect x="660" y="20" width="440" height="620" class="domain-box domain-rclk"/>
+    <text x="890" y="48" class="domain-header" fill="#a78bfa">READ CLOCK DOMAIN (rclk)</text>
+
+    <!-- ==================== 1. FIFO MEMORY (DUAL PORT RAM) ==================== -->
+    <rect x="420" y="80" width="280" height="150" class="module-box mod-mem"/>
+    <text x="560" y="112" class="label-title">FIFO MEMORY BUFFER</text>
+    <text x="560" y="130" class="label-sub">Dual-Port RAM (async_fifo_mem)</text>
+    <text x="560" y="146" class="label-sub" fill="#6ee7b7">16 Words × 32 Bits Depth</text>
+
+    <!-- Mem internal divider -->
+    <line x1="560" y1="160" x2="560" y2="215" stroke="#059669" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <text x="490" y="195" font-size="10" fill="#a7f3d0" text-anchor="middle">Write Port (wclk)</text>
+    <text x="630" y="195" font-size="10" fill="#a7f3d0" text-anchor="middle">Read Port (rclk/comb)</text>
+
+    <!-- ==================== 2. WRITE POINTER & FULL LOGIC ==================== -->
+    <rect x="50" y="120" width="280" height="270" class="module-box mod-wclk"/>
+    <text x="190" y="148" class="label-title">FIFO wptr & FULL LOGIC</text>
+    <text x="190" y="165" class="label-sub">(wptr_full_ctrl)</text>
+
+    <!-- Sub-blocks inside wptr_full_ctrl -->
+    <rect x="70" y="185" width="240" height="42" rx="4" fill="#0369a1" stroke="#38bdf8"/>
+    <text x="190" y="205" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">Figure 1 Dual Counter</text>
+    <text x="190" y="218" font-size="9" fill="#bae6fd" text-anchor="middle">wbin (Binary) &amp; wptr (Gray)</text>
+
+    <rect x="70" y="240" width="240" height="42" rx="4" fill="#0369a1" stroke="#38bdf8"/>
+    <text x="190" y="258" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">Lookahead Full Comparator</text>
+    <text x="190" y="271" font-size="9" fill="#bae6fd" text-anchor="middle">wgnext == {~rptr_sync[4:3], rptr_sync[2:0]}</text>
+
+    <rect x="70" y="295" width="240" height="42" rx="4" fill="#0369a1" stroke="#38bdf8"/>
+    <text x="190" y="313" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">Occupancy &amp; Watermark</text>
+    <text x="190" y="326" font-size="9" fill="#bae6fd" text-anchor="middle">w_occupancy = wbin - rbin_sync</text>
+
+    <rect x="70" y="350" width="240" height="28" rx="4" fill="#0c4a6e" stroke="#38bdf8"/>
+    <text x="190" y="368" font-size="10" font-weight="600" fill="#38bdf8" text-anchor="middle">Registered Output: wfull, almost_full</text>
+
+    <!-- ==================== 3. READ POINTER & EMPTY LOGIC ==================== -->
+    <rect x="790" y="120" width="280" height="270" class="module-box mod-rclk"/>
+    <text x="930" y="148" class="label-title">FIFO rptr & EMPTY LOGIC</text>
+    <text x="930" y="165" class="label-sub">(rptr_empty_ctrl)</text>
+
+    <!-- Sub-blocks inside rptr_empty_ctrl -->
+    <rect x="810" y="185" width="240" height="42" rx="4" fill="#5b21b6" stroke="#a78bfa"/>
+    <text x="930" y="205" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">Figure 1 Dual Counter</text>
+    <text x="930" y="218" font-size="9" fill="#ddd6fe" text-anchor="middle">rbin (Binary) &amp; rptr (Gray)</text>
+
+    <rect x="810" y="240" width="240" height="42" rx="4" fill="#5b21b6" stroke="#a78bfa"/>
+    <text x="930" y="258" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">Lookahead Empty Comparator</text>
+    <text x="930" y="271" font-size="9" fill="#ddd6fe" text-anchor="middle">rgnext == wptr_sync</text>
+
+    <rect x="810" y="295" width="240" height="42" rx="4" fill="#5b21b6" stroke="#a78bfa"/>
+    <text x="930" y="313" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">Occupancy &amp; Watermark</text>
+    <text x="930" y="326" font-size="9" fill="#ddd6fe" text-anchor="middle">r_occupancy = wbin_sync - rbin</text>
+
+    <rect x="810" y="350" width="240" height="28" rx="4" fill="#4c1d95" stroke="#a78bfa"/>
+    <text x="930" y="368" font-size="10" font-weight="600" fill="#a78bfa" text-anchor="middle">Registered Output: rempty, almost_empty</text>
+
+    <!-- ==================== 4. SYNCHRONIZERS (CENTER BOTTOM) ==================== -->
+    <!-- Top Sync: wptr -> rclk domain (u_sync_w2r) -->
+    <g transform="translate(420, 420)">
+      <rect x="0" y="0" width="280" height="85" class="module-box mod-sync"/>
+      <text x="140" y="22" font-size="11" font-weight="700" fill="#c7d2fe" text-anchor="middle">cdc_sync (w2r)</text>
+      <text x="140" y="36" font-size="9" fill="#a5b4fc" text-anchor="middle">Crosses wptr into rclk domain</text>
+
+      <!-- 2-Flop Stages -->
+      <rect x="60" y="44" width="60" height="30" class="flop-box"/>
+      <text x="90" y="63" font-size="10" font-weight="600" fill="#ffffff" text-anchor="middle">Stage 1</text>
+      
+      <line x1="120" y1="59" x2="155" y2="59" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow-gray)"/>
+
+      <rect x="160" y="44" width="60" height="30" class="flop-box"/>
+      <text x="190" y="63" font-size="10" font-weight="600" fill="#ffffff" text-anchor="middle">Stage 2</text>
+      <text x="260" y="75" font-size="9" fill="#a5b4fc">CLK: rclk</text>
+    </g>
+
+    <!-- Bottom Sync: rptr -> wclk domain (u_sync_r2w) -->
+    <g transform="translate(420, 530)">
+      <rect x="0" y="0" width="280" height="85" class="module-box mod-sync"/>
+      <text x="140" y="22" font-size="11" font-weight="700" fill="#c7d2fe" text-anchor="middle">cdc_sync (r2w)</text>
+      <text x="140" y="36" font-size="9" fill="#a5b4fc" text-anchor="middle">Crosses rptr into wclk domain</text>
+
+      <!-- 2-Flop Stages (reversed flow) -->
+      <rect x="160" y="44" width="60" height="30" class="flop-box"/>
+      <text x="190" y="63" font-size="10" font-weight="600" fill="#ffffff" text-anchor="middle">Stage 1</text>
+      
+      <line x1="160" y1="59" x2="125" y2="59" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow-gray)"/>
+
+      <rect x="60" y="44" width="60" height="30" class="flop-box"/>
+      <text x="90" y="63" font-size="10" font-weight="600" fill="#ffffff" text-anchor="middle">Stage 2</text>
+      <text x="20" y="75" font-size="9" fill="#a5b4fc">CLK: wclk</text>
+    </g>
+
+    <!-- ==================== WIRES & BUSES ==================== -->
+    <!-- wdata bus -->
+    <path d="M 0 95 L 420 95" class="wire-data" marker-end="url(#arrow-data)"/>
+    <text x="10" y="87" class="label-port" fill="#34d399">wdata[31:0]</text>
+
+    <!-- rdata bus -->
+    <path d="M 700 95 L 1120 95" class="wire-data" marker-end="url(#arrow-data)"/>
+    <text x="1020" y="87" class="label-port" fill="#34d399">rdata[31:0]</text>
+
+    <!-- winc -->
+    <path d="M 0 170 L 50 170" class="wire-wclk" marker-end="url(#arrow-wclk)"/>
+    <text x="10" y="163" class="label-port">winc</text>
+
+    <!-- wclken (protected write enable) from wptr_full_ctrl to Memory -->
+    <path d="M 330 185 L 380 185 L 380 160 L 420 160" class="wire-wclk" marker-end="url(#arrow-wclk)"/>
+    <text x="345" y="152" class="label-bus">wclken</text>
+
+    <!-- waddr from wptr_full_ctrl to Memory -->
+    <path d="M 330 205 L 400 205 L 400 185 L 420 185" class="wire-wclk" marker-end="url(#arrow-wclk)"/>
+    <text x="345" y="200" class="label-bus">waddr[3:0]</text>
+
+    <!-- raddr from rptr_empty_ctrl to Memory -->
+    <path d="M 790 205 L 720 205 L 720 185 L 700 185" class="wire-rclk" marker-end="url(#arrow-rclk)"/>
+    <text x="730" y="200" class="label-bus">raddr[3:0]</text>
+
+    <!-- rinc -->
+    <path d="M 1120 170 L 1070 170" class="wire-rclk" marker-end="url(#arrow-rclk)"/>
+    <text x="1065" y="163" class="label-port">rinc</text>
+
+    <!-- wfull & almost_full outputs -->
+    <path d="M 50 245 L 0 245" class="wire-wclk" marker-end="url(#arrow-wclk)"/>
+    <text x="10" y="238" class="label-port">wfull</text>
+
+    <path d="M 50 280 L 0 280" class="wire-wclk" marker-end="url(#arrow-wclk)"/>
+    <text x="10" y="273" class="label-port">almost_full</text>
+
+    <path d="M 50 315 L 0 315" class="wire-wclk" marker-end="url(#arrow-wclk)"/>
+    <text x="10" y="308" class="label-port">w_occupancy[4:0]</text>
+
+    <!-- rempty & almost_empty outputs -->
+    <path d="M 1070 245 L 1120 245" class="wire-rclk" marker-end="url(#arrow-rclk)"/>
+    <text x="1045" y="238" class="label-port">rempty</text>
+
+    <path d="M 1070 280 L 1120 280" class="wire-rclk" marker-end="url(#arrow-rclk)"/>
+    <text x="1010" y="273" class="label-port">almost_empty</text>
+
+    <path d="M 1070 315 L 1120 315" class="wire-rclk" marker-end="url(#arrow-rclk)"/>
+    <text x="1010" y="308" class="label-port">r_occupancy[4:0]</text>
+
+    <!-- ==================== CDC CROSSING BUSES ==================== -->
+    <!-- wptr (Gray) from wptr_full_ctrl down into cdc_sync (w2r) -->
+    <path d="M 230 390 L 230 465 L 420 465" class="wire-wclk" marker-end="url(#arrow-wclk)"/>
+    <text x="240" y="458" class="label-bus" fill="#38bdf8">wptr[4:0] (Gray)</text>
+
+    <!-- wptr_sync (Synchronized Gray) out of cdc_sync (w2r) into rptr_empty_ctrl -->
+    <path d="M 700 465 L 890 465 L 890 390" class="wire-rclk" marker-end="url(#arrow-rclk)"/>
+    <text x="730" y="458" class="label-bus" fill="#a78bfa">wptr_sync[4:0] (Safe)</text>
+
+    <!-- rptr (Gray) from rptr_empty_ctrl down into cdc_sync (r2w) -->
+    <path d="M 970 390 L 970 575 L 700 575" class="wire-rclk" marker-end="url(#arrow-rclk)"/>
+    <text x="830" y="568" class="label-bus" fill="#a78bfa">rptr[4:0] (Gray)</text>
+
+    <!-- rptr_sync (Synchronized Gray) out of cdc_sync (r2w) into wptr_full_ctrl -->
+    <path d="M 420 575 L 150 575 L 150 390" class="wire-wclk" marker-end="url(#arrow-wclk)"/>
+    <text x="230" y="568" class="label-bus" fill="#38bdf8">rptr_sync[4:0] (Safe)</text>
+
+  </svg>
+</div>
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-chip" style="background:#0284c7; border-color:#38bdf8;"></div>
+    <span>Write Clock Domain (<code>wclk</code>)</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-chip" style="background:#7c3aed; border-color:#a78bfa;"></div>
+    <span>Read Clock Domain (<code>rclk</code>)</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-chip" style="background:#059669; border-color:#34d399;"></div>
+    <span>Dual-Port Data Path</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-chip" style="background:#312e81; border-color:#818cf8;"></div>
+    <span>CDC 2-Flop Synchronizer</span>
+  </div>
+</div>
+
+</body>
+</html>

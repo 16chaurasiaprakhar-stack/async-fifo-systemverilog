@@ -1,0 +1,27 @@
+# Vivado and EDA build artifacts
+*.jou
+*.log
+*.pb
+*.dcp
+*.wdb
+*.vcd
+*.vvp
+*.str
+*.xpr.bak
+
+# Vivado generated directories
+vivado_proj/
+.Xil/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
