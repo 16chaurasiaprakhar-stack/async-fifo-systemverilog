@@ -170,7 +170,7 @@ The testbench [`tb/async_fifo_pro_tb.sv`](tb/async_fifo_pro_tb.sv) provides 100%
 - **Phase 1: Reset & Idle Verification:** Verifies initial flag conditions (`rempty=1`, `wfull=0`, occupancy=0).
 - **Phase 2: Single-Word Handshake:** Ensures latency cycles and pointer increments function accurately.
 - **Phase 3: Burst Write to Full:** Pushes sequential data until depth saturation, confirming `wfull` asserts and excess writes are safely dropped.
-- **Phase 4: Burst Read to Empty:** Empties the FIFO, checking data integrity and confirming `rempty` asserts.
+- **Phase 4: Burst Read to Empty:** Empties the FIFO, checking data integrity and confirming `rempty` asserts. 
 - **Phase 5: Extreme Ratio (Fast Producer / Slow Consumer):** `wclk` = 200 MHz, `rclk` = 25 MHz (8:1 clock frequency ratio).
 - **Phase 6: Extreme Ratio (Slow Producer / Fast Consumer):** `wclk` = 25 MHz, `rclk` = 200 MHz (1:8 clock frequency ratio).
 - **Phase 7: Random Concurrent Traffic with Clock Jitter:** Randomized bursts, back-to-back writes/reads, and random delays.
