@@ -73,7 +73,7 @@ winc --------->|        (Dual-Port RAM)          |============>| rdata [31:0]   
                      v                     |                         v                     |
                +-----------+         +-----------+             +-----------+         +-----------+
                | cdc_sync  |         | cdc_sync  |             | cdc_sync  |         | cdc_sync  |
-               | (w2r sync)|         | (r2w sync)|             | (r2w sync)|         | (w2r sync)|
+               | (w2r sync)|         | (r2w sync)|             | (r2w sync)|         | (w2r sync)| 
                | 2-FF Flop |         | 2-FF Flop |             | 2-FF Flop |         | 2-FF Flop |
                +-----------+         +-----------+             +-----------+         +-----------+
                      |                                                       |
