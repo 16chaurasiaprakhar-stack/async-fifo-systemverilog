@@ -116,7 +116,7 @@ This guarantees that synchronizer registers are kept intact and placed physicall
 
 ---
 
-## Architectural Trade-Off: Production vs. Cummings Style #2
+## Architectural Trade-Off: Production vs. Cummings Style #2 
 
 | Architectural Metric | Cummings Style #2 (`style2_academic`) | Production FIFO (`async_fifo_pro`) |
 | :--- | :--- | :--- |
