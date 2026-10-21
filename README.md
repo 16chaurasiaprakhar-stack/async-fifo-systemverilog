@@ -98,7 +98,7 @@ This design maintains **two distinct registers per domain**:
   $$\text{wgnext} = (\text{wbnext} \gg 1) \oplus \text{wbnext}$$
 This keeps the critical setup timing path clean and enables high operating frequencies.
 
-### 3. Pessimistic Safe Flow Control & Watermarks
+### 3. Pessimistic Safe Flow Control & Watermarks 
 Because cross-domain synchronizers introduce 2 clock cycles of latency:
 - In the **write domain**, the synchronized `rptr_sync` is slightly delayed. The FIFO perceives the buffer to be *fuller than it actually is*.
 - In the **read domain**, `wptr_sync` is slightly delayed. The FIFO perceives the buffer to have *less data than it actually has*.
