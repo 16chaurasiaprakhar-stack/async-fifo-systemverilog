@@ -1,6 +1,5 @@
 #------------------------------------------------------------------------------
 # Constraints: async_fifo_pro.sdc
-# Purpose: Industry-Standard SDC/XDC for Production Asynchronous FIFO
 #------------------------------------------------------------------------------
 
 # 1. Primary Clock Definitions
