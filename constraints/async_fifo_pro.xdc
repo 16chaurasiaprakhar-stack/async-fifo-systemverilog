@@ -1,6 +1,5 @@
 #------------------------------------------------------------------------------
 # Vivado Constraints File: async_fifo_pro.xdc
-# Target: AMD / Xilinx Vivado (Artix-7, Kintex-7, UltraScale, UltraScale+)
 #------------------------------------------------------------------------------
 
 # 1. Primary Clock Constraints
