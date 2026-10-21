@@ -1,7 +1,6 @@
 #------------------------------------------------------------------------------
 # Constraints: async_fifo_pro.sdc
 # Purpose: Industry-Standard SDC/XDC for Production Asynchronous FIFO
-# Tools: Synopsys PrimeTime, Cadence Tempus, AMD Vivado, Intel Quartus
 #------------------------------------------------------------------------------
 
 # 1. Primary Clock Definitions
