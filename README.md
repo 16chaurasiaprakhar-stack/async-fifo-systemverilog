@@ -1,7 +1,7 @@
 # Production Asynchronous FIFO (CDC) & Verification Suite in SystemVerilog
 
 [![SystemVerilog](https://img.shields.io/badge/Language-SystemVerilog%20IEEE%201800-blue.svg)](https://standards.ieee.org/)
-[![EDA Simulation](https://img.shields.io/badge/Simulation-Icarus%20%7C%20Vivado%20XSim-brightgreen.svg)]()
+[![EDA Simulation](https://img.shields.io/badge/Simulation-Icarus%20%7C%20Vivado%20XSim-brightgreen.svg)]() 
 [![CDC Verification](https://img.shields.io/badge/Verification-SVA%20%2B%20CDC%20Scoreboard-orange.svg)]()
 [![Synthesis Ready](https://img.shields.io/badge/Synthesis-Vivado%20%2F%20Design%20Compiler-blueviolet.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
