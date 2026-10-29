@@ -15,7 +15,7 @@ This repository provides a side-by-side implementation of:
 ---
 
 ## 📑 Table of Contents
-- [Why Asynchronous FIFOs Matter (The Engineering Challenge)](#why-asynchronous-fifos-matter-the-engineering-challenge)
+- [Why Asynchronous FIFOs Matter](#why-asynchronous-fifos-matter-the-engineering-challenge)
 - [Architecture & Core Concepts](#architecture--core-concepts)
   - [1. Resolving Empty vs. Full via $(N+1)$-Bit Gray Coding](#1-resolving-empty-vs-full-via-n1-bit-gray-coding)
   - [2. Dual-Counter Architecture ($F_{max}$ Optimization)](#2-dual-counter-architecture-f_max-optimization)
