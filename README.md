@@ -131,6 +131,8 @@ This guarantees that synchronizer registers are kept intact and placed physicall
 
 ---
 
+
+
 ## Directory Structure
 
 ```
