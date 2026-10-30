@@ -66,7 +66,7 @@ module wptr_full_ctrl #(
             wbin        <= '0;
             wptr        <= '0;
             wfull       <= 1'b0;
-            almost_full <= 1'b0;
+            almost_full <= 1'b0;  // Pre - call 
         end else begin
             wbin        <= wbnext;
             wptr        <= wgnext;
