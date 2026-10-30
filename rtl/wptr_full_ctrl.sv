@@ -2,7 +2,6 @@
 // Module: wptr_full_ctrl
 // Description: Write Pointer Generation, Glitch-Free Registered Full Flag,
 //              and Occupancy / Almost-Full Monitoring.
-// Standard: IEEE 1800 SystemVerilog (Cummings FIFO Style #1 Production-Grade)
 //-----------------------------------------------------------------------------
 `timescale 1ns / 1ps
 
