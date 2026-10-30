@@ -2,7 +2,6 @@
 // Module: wptr_full
 // Description: Write Pointer & Asynchronously Preset Full Flag Synchronizer
 // Based on: Clifford E. Cummings & Peter Alfke (SNUG 2002) - FIFO Style #2
-// Modernized to SystemVerilog (IEEE 1800)
 //-----------------------------------------------------------------------------
 `timescale 1ns / 1ps
 
