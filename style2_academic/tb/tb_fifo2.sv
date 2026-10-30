@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // Testbench: tb_fifo2
-// Description: Comprehensive asynchronous testbench for FIFO Style #2
+// asynchronous testbench for FIFO Style #2
 // Features:
 // - Asynchronous, non-integer ratio clocks (wclk = 100MHz, rclk = 75.2MHz)
 // - Scoreboard queue for verifying First-In-First-Out data integrity
