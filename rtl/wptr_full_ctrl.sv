@@ -55,7 +55,7 @@ module wptr_full_ctrl #(
     assign wfull_val = (wgnext == { ~rptr_sync[PTR_WIDTH-1:PTR_WIDTH-2],
                                      rptr_sync[PTR_WIDTH-3:0] });
 
-    // 3. Write Domain Occupancy Calculation (Safe & Pessimistic)
+    // 3. Write Domain Occupancy Calculation 
     logic [PTR_WIDTH-1:0] rbin_sync;
     assign rbin_sync   = gray2bin(rptr_sync);
     assign w_occupancy = wbin - rbin_sync;
