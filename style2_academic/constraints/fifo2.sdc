@@ -1,7 +1,6 @@
 #------------------------------------------------------------------------------
 # Constraints: fifo2.sdc
 # Purpose: Synopsys Design Constraints (SDC) for Asynchronous FIFO (Style #2)
-# Applicable to: Synopsys PrimeTime, Cadence Tempus, Xilinx Vivado (XDC)
 #------------------------------------------------------------------------------
 
 # 1. Define Primary Asynchronous Clocks
