@@ -19,7 +19,7 @@ module wptr_full_ctrl #(
     output logic                 almost_full,      // Programmable almost-full watermark
     output logic [PTR_WIDTH-1:0] wptr,             // Registered Gray pointer to CDC sync
     output logic [ADDR_WIDTH-1:0] waddr,           // Memory write address
-    output logic [PTR_WIDTH-1:0] w_occupancy       // Real-time FIFO fill count (pessimistic)
+    output logic [PTR_WIDTH-1:0] w_occupancy       // Real-time FIFO fill count 
 );
 
     // Internal registers
